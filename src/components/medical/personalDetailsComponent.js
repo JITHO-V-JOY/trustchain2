@@ -47,6 +47,9 @@ const useStyles = makeStyles(theme => ({
       .string()
       .required('Phone Number is Required')
       .min(10),
+    adhaar: yup
+      .string()
+      .required('Adhaar number is Required'),
     image: yup
       .string()
       .required('image is Required'),
@@ -90,10 +93,36 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                     <Formik
                     initialValues={medicalData}
                     onSubmit={values => {
+
+                    
                     convertImage(values.image);
                     convertID(values.id);
-
                     console.log('values', values);
+                    var unirest = require("unirest");
+
+                      var req = unirest("POST", "https://aadhaarverify1.p.rapidapi.com/Uidverifywebsvcv1/Uidverify");
+
+                      req.headers({
+                        "content-type": "application/x-www-form-urlencoded",
+                        "x-rapidapi-key": "94a386bce7msh10b7b2c059c0534p10b988jsn0741f580f23d",
+                        "x-rapidapi-host": "aadhaarverify1.p.rapidapi.com",
+                        "useQueryString": true
+                      });
+
+                      req.form({
+                        "uidnumber": values.adhaar,
+                        "consent": "Y",
+                        "method": "uidvalidate",
+                        "txn_id": "4545533",
+                        "clientid": "111"
+                      });
+
+
+                      req.end(function (res) {
+                        if (res.error) throw new Error(res.error);
+                        console.log("helloo")
+                        console.log(res.body);
+                      });
                     setMedicalData(values);
                     nextStep();
                     }}
@@ -151,6 +180,15 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                             error={touched.phno && errors.phno}
                             helperText={touched.phno && errors.phno}
                             />
+                            <Field
+                            type="number"
+                            name='adhaar'
+                            label='Adhaar Number*'
+                            margin='normal'
+                            as={TextField}
+                            error={touched.adhaar&& errors.adhaar}
+                            helperText={touched.adhaar && errors.adhaar}
+                            />
                             <div className={classes.select}>
                             <label for="image">Upload Your Image</label>
                             <Field
@@ -177,7 +215,30 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                             </div>
 
                           <Button
-                            type='submit'
+                            onClick = {()=>{
+                              return fetch("https://aadhaarverify1.p.rapidapi.com/Uidverifywebsvcv1/Uidverify", {
+                                "method": "POST",
+                                "headers": {
+                                  "content-type": "application/x-www-form-urlencoded",
+                                  "x-rapidapi-key": "94a386bce7msh10b7b2c059c0534p10b988jsn0741f580f23d",
+                                  "x-rapidapi-host": "aadhaarverify1.p.rapidapi.com"
+                                },
+                                "body": {
+                                  "uidnumber": "7683977733",
+                                  "consent": "Y",
+                                  "method": "uidvalidate",
+                                  "txn_id": "4545533",
+                                  "clientid": "111"
+                                }
+                              })
+                              .then(response => {
+                                console.log(response);
+                                console.log("hello")
+                              })
+                              .catch(err => {
+                                console.error(err);
+                              });
+                            }}
                             variant='contained'
                             color='primary'
                             className={classes.button}

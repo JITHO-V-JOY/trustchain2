@@ -8,7 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import { MDBCol, MDBFormInline, MDBBtn } from "mdbreact";
+
 import {Input, Media} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import Button from '@material-ui/core/Button'
@@ -26,8 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
   function RenderRequest({Data}){
 	const classes = useStyles();
-	
-	
 	
 	const list = Data.map((data, index)=>{
 		console.log(index);
@@ -311,7 +309,7 @@ export default class Request extends Component{
         return(
             <div className="container mt-5">
                 <div className="row col-12 col-md-12">
-                <MDBCol md="12">
+            
 				<form onSubmit={(value)=> {
 					this.setState({State: value})
 			         console.log(value)}} className="md-form mr-auto mb-4">
@@ -323,7 +321,7 @@ export default class Request extends Component{
 				  value = "search"/>
             
                   </form>
-                  </MDBCol>
+                  
                 
 				</div>
 				<RenderRequest Data = {this.props.Data}/>

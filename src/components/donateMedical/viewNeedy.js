@@ -1,9 +1,21 @@
 import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
-import {Button } from 'reactstrap'
-export default function ViewNeedy({data, request, requestCount, payment, payForRequested}){
+import {Button } from 'reactstrap';
+import {Form, Input, FormGroup, Label} from 'reactstrap';
+const ipfsClient = require('ipfs-http-client');
+const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
+
+export default function ViewNeedy({data,  requestCount, payment, payForRequested}){
     const dispatch = useDispatch();
 
+    const [comment, setComment] = useState('Help him...');
+    console.log('comment', comment);
+    const addComment = async() =>{
+            data.comments.push(comment);
+            console.log('data', data);
+        await ipfs.files.write('/QmeQT4wpPkwyRtQmM4f9wMxYnShNjqcTAdd2sj1e19dj8y', data);
+
+    }
     console.log('data', data)
     const  _arrayBufferToBase64 = ( buffer ) => {
         var binary = '';
@@ -32,6 +44,7 @@ export default function ViewNeedy({data, request, requestCount, payment, payForR
                 </div>
 
             </div>
+            <hr></hr>
             <div className="row">
             <div className="col-12 col-md mt-1">
                   <h4>Personal Details</h4><br/>
@@ -54,14 +67,36 @@ export default function ViewNeedy({data, request, requestCount, payment, payForR
             </div>
 
         </div>
+        <hr></hr>
             <div className="row">
-                <div className="col-12 col-md-2 mt-1">
+                <div className="col-12 col-md-6 mt-1">
                 <h3>{`Pay For ${data.name}`}</h3>
-                <Button onClick={()=> dispatch(payForRequested(requestCount, 1000)) }>PAY</Button>
+                <Button onClick={()=> payForRequested(requestCount, 1000) }>PAY</Button>
 
                 </div>
             </div>
-            
+    
+        <hr></hr>
+            <div className="row">
+                <div className = "col-12 col-md-12 mt-2">
+                        <Form onSubmit={(values) => console.log(values)}>
+                          <FormGroup>
+                            <Label for="comment">Add Comment</Label>
+                            <Input type="textarea" name="comment" id="comment" placeholder="write your comment" onChangeText={(value) => setComment(value)} />
+                            </FormGroup> 
+                            <FormGroup>
+                            <Button  onClick={async() => addComment()}>Comment</Button>
+                          </FormGroup>
+                        </Form>
+                
+                </div>
+            </div>   
+
+            <hr></hr>
+
+
+
+
         
         </div>
     );

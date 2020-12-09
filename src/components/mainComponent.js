@@ -52,7 +52,7 @@ class Main extends Component{
             console.log(this.props.trustChainData.filter((arrData, index, arr)=> index === Number(requestId))[0])
             return(
                 <ViewNeedy data = {this.props.trustChainData.filter((arrData, index, arr)=> index === Number(requestId))[0]}
-                       request  = {this.props.request.filter((request, index, arrr)=> index === Number(requestId))[0]}
+                      // request  ={} //{this.props.request.filter((request, index, arrr)=> index === Number(requestId))[0]}
                        requestCount  = {this.props.requestCount.filter((requestCount, index, arr)=> index === Number(requestId))[0]}
                        paymentStatus = {this.props.payment}
                        payForRequested = {this.props.payForRequested}

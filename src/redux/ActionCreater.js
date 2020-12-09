@@ -1,16 +1,16 @@
 import * as ActionTypes from './ActionTypes';
+import CryptoJS from 'crypto-js';
 const Web3 = require('web3');
-const ethers = require('ethers');
-
-//const Gsn = require("@opengsn/gsn/dist/src/relayclient/")
-//const RelayProvider = Gsn.RelayProvider;
-//const configureGSN = require('@opengsn/gsn/dist/src/relayclient/GSNConfigurator').configureGSN;
+const { ethers } = require("ethers");
+//const provider =  new ethers.providers.InfuraProvider('ropsten');
+const Gsn = require("@opengsn/gsn/dist/src/relayclient/")
+const RelayProvider = Gsn.RelayProvider;
+const configureGSN = require('@opengsn/gsn/dist/src/relayclient/GSNConfigurator').configureGSN;
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 const TrustChainAddress = '0x4D8BBf5A16Fdc02340a34132E62391Ee782B79a1';
 const web3 = new Web3( new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c1633c281b39417eb2d061c5479a68f7'));
 
-/*
 const conf = {
 	ourContract: '0x19870E0837496886Dc9FB56d956399DD7d052754',
 	paymaster:   '0x3E745FE690830b376A45a561db39Bf1e6AA74839',
@@ -30,11 +30,9 @@ const gsnConfig = configureGSN({
 });
 const gsnProvider = new RelayProvider((new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c1633c281b39417eb2d061c5479a68f7'))).currentProvider, gsnConfig);
 
-//const origProvider = web3.give;
-//const gsnProvider = new RelayProvider(origProvider, gsnConfig);
 const provider = new ethers.providers.Web3Provider(gsnProvider);
 var acct = provider.provider.newAccount();
-*/
+
 const abi= [
 	{
 		"anonymous": false,
@@ -205,6 +203,7 @@ const abi= [
 		"type": "function"
 	}
 ]
+//let contract = await new ethers.Contract( TrustChainAddress, abi,  provider.getSigner(acct.address, acct.privateKey));
 
 /*
 const blockChain = async()=>{
@@ -216,6 +215,9 @@ const blockChain = async()=>{
     console.log('count', count.toNumber());
 }
 */
+
+
+
 export const incStatus = (status) =>(dispatch) =>{
     dispatch(addStatus(status));
     console.log('st', status)
@@ -229,7 +231,8 @@ export const addStatus = (status) =>({
 
 export const addRequest = (rHash, amount) => async(dispatch) => {
 		dispatch(requestLoading());
-		let wallet = new ethers.wallet('339f6454f15bb8c6cbbf2a4203a37ee38422714aef21052b87b68593219fdc00', web3);
+		const privatekey ="0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9";
+        const  wallet = new ethers.Wallet(privatekey).connect(provider);
 
 		const contract = new ethers.Contract(TrustChainAddress, abi, wallet);
 		console.log('contract', contract);
@@ -258,6 +261,40 @@ export const requestSuccess = () =>({
 	type: ActionTypes.ADD_REQUEST
 });
 
+export const payForRequested =(id, money) => async(dispatch) => {
+	dispatch(payLoading());
+	//let privatekey ="0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9";
+	//let  wallet = new ethers.Wallet(privatekey).connect(provider)
+	let contract = new ethers.Contract(TrustChainAddress, abi, provider.getSigner(acct.address, acct.privateKey));
+		console.log('contract', contract);
+		contract.sendMoney(id, money)
+		.then(function(transaction){
+			console.log(transaction);
+			},error => {
+				var errmess = new Error(error.message);
+				throw errmess;
+		})
+		.then(() => { dispatch(paySuccess())})
+		.catch((error)=> dispatch(payFailed(error.message)));
+
+};
+
+export const payLoading = () =>({
+	type: ActionTypes.PAY_LOADING
+});
+export const paySuccess = () =>({
+	type: ActionTypes.PAY_SUCCESS
+});
+
+export const payFailed = (msg) => ({
+	type: ActionTypes.PAY_FAILED,
+	payload: msg
+});
+
+export const addComment = () => async(dispatch)=>{
+
+	
+}
 
 export const loadTrustChainData = () => async(dispatch) => {
 	console.log("hello")
@@ -269,15 +306,15 @@ export const loadTrustChainData = () => async(dispatch) => {
 	const contract = new web3.eth.Contract(abi, TrustChainAddress);
 	contract.methods.requestCount().call().then((requestCount)=>{
 		
-		for(let i =1; i<=requestCount; i++){
+		for(let i =2; i<=requestCount; i++){
 			contract.methods.request(i).call().then(async(request)=>{
 				if(!request.fulfilled){
 				  const concat = require('it-concat')
-				  const  Data =  await concat(ipfs.cat('QmbQ3PTMdbQ3kdVVff7BLTmyTgg5Sf8UTAMS3k954GUvBh'));
+				  const  Data =  await concat(ipfs.cat(request.requestHash));
 				   const trustChainData  = JSON.parse(Data.toString());
 				   dataArray.push(trustChainData);
 				   requestArray.push(request);
-				   requestCountArray.push(requestCount);
+				   requestCountArray.push(i);
 				}
 				else{
 					console.log(i);
@@ -288,18 +325,15 @@ export const loadTrustChainData = () => async(dispatch) => {
 		console.log('error', errmess);
 		throw errmess;
 	})
-
 	.then(()=>{
 		dispatch(addTrustChainRequest(requestArray))
 		console.log('request', requestArray);	
-	})
-	.then(()=>{
 		dispatch(addTrustChainRequestId(requestCountArray))
 		console.log('requestCount', requestCountArray);	
+		dispatch(addTrustChainData(dataArray))
+				console.log('data', dataArray);	
 	})
-   .then(() => {dispatch(addTrustChainData(dataArray))
-				console.log('data', dataArray);		
-   })
+	
    .catch(error => dispatch(trustChainDataFailed(error.message)));
 	
 };
@@ -329,31 +363,3 @@ export const addTrustChainData = (dataArray) => ({
 });
 
 
-export const payForRequested =async(id, money) => (dispatch) => {
-	dispatch(payLoading());
-	let wallet = new ethers.wallet('339f6454f15bb8c6cbbf2a4203a37ee38422714aef21052b87b68593219fdc00', web3);
-
-	const contract = new ethers.Contract(TrustChainAddress, abi, wallet);
-	console.log('contract', contract);
-    contract.sendMoney(id, money)
-	.then(function(transaction){
-		console.log(transaction);
-		},error => {
-			var errmess = new Error(error.message);
-			throw errmess;
-	})
-	.then(()=> dispatch(paySuccess()))
-	.catch((error)=>{dispatch(payFailed(error.message))});
-
-};
-
-export const payLoading = () =>({
-	type: ActionTypes.PAY_LOADING
-});
-export const payFailed = (msg) => ({
-	type: ActionTypes.PAY_FAILED,
-	payload: msg
-});
-export const paySuccess = () =>({
-	type: ActionTypes.PAY_SUCCESS
-});

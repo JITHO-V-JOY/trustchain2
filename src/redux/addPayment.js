@@ -1,7 +1,7 @@
 import * as  ActionTypes from './ActionTypes';
 
 export const Payment = (state = {
-   isLoading: true,
+   isLoading: false,
    errMess: null,
    paymentSuccess: false
 }, action) => {
