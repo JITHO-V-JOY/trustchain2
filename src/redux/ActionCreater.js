@@ -2,15 +2,18 @@ import * as ActionTypes from './ActionTypes';
 import CryptoJS from 'crypto-js';
 const Web3 = require('web3');
 const { ethers } = require("ethers");
-//const provider =  new ethers.providers.InfuraProvider('ropsten');
+const provider =  new ethers.providers.InfuraProvider("ropsten");
+/*
 const Gsn = require("@opengsn/gsn/dist/src/relayclient/")
 const RelayProvider = Gsn.RelayProvider;
 const configureGSN = require('@opengsn/gsn/dist/src/relayclient/GSNConfigurator').configureGSN;
+*/
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
-const TrustChainAddress = '0x4D8BBf5A16Fdc02340a34132E62391Ee782B79a1';
+const TrustChainAddress =  '0x67ba8919f54E188F7a7e62D9d8a007350EE8fCB6'; //'0x4D8BBf5A16Fdc02340a34132E62391Ee782B79a1';
 const web3 = new Web3( new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c1633c281b39417eb2d061c5479a68f7'));
 
+/*
 const conf = {
 	ourContract: '0x19870E0837496886Dc9FB56d956399DD7d052754',
 	paymaster:   '0x3E745FE690830b376A45a561db39Bf1e6AA74839',
@@ -30,10 +33,28 @@ const gsnConfig = configureGSN({
 });
 const gsnProvider = new RelayProvider((new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c1633c281b39417eb2d061c5479a68f7'))).currentProvider, gsnConfig);
 
-const provider = new ethers.providers.Web3Provider(gsnProvider);
+//const provider = new ethers.providers.Web3Provider(gsnProvider);
 var acct = provider.provider.newAccount();
-
-const abi= [
+*/
+const abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_rHash",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "makeRequest",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
 	{
 		"anonymous": false,
 		"inputs": [
@@ -66,6 +87,24 @@ const abi= [
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_money",
+				"type": "uint256"
+			}
+		],
+		"name": "sendMoney",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -89,24 +128,6 @@ const abi= [
 		],
 		"name": "Verified",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_rHash",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			}
-		],
-		"name": "makeRequest",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"inputs": [
@@ -153,24 +174,6 @@ const abi= [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_money",
-				"type": "uint256"
-			}
-		],
-		"name": "sendMoney",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -231,14 +234,16 @@ export const addStatus = (status) =>({
 
 export const addRequest = (rHash, amount) => async(dispatch) => {
 		dispatch(requestLoading());
-		const privatekey ="0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9";
-        const  wallet = new ethers.Wallet(privatekey).connect(provider);
-
+		//const privatekey ="0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9";
+       // const  wallet = new ethers.Wallet(privatekey).connect(provider);
+	   let wallet = new ethers.Wallet('0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9', provider);
 		const contract = new ethers.Contract(TrustChainAddress, abi, wallet);
+		//let contract = await new ethers.Contract( TrustChainAddress, abi,  provider.getSigner("0x7E1c374EE69c79d0fF66Bd31Cc38d4A2EeE46f32", "339f6454f15bb8c6cbbf2a4203a37ee38422714aef21052b87b68593219fdc00"));
+
 		console.log('contract', contract);
 		contract.makeRequest(rHash, amount)
 		.then(function(transaction){
-			console.log(transaction);
+			console.log("transaction", transaction);
 			},error => {
 				var errmess = new Error(error.message);
 				throw errmess;
@@ -261,11 +266,13 @@ export const requestSuccess = () =>({
 	type: ActionTypes.ADD_REQUEST
 });
 
+
 export const payForRequested =(id, money) => async(dispatch) => {
 	dispatch(payLoading());
 	//let privatekey ="0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9";
 	//let  wallet = new ethers.Wallet(privatekey).connect(provider)
-	let contract = new ethers.Contract(TrustChainAddress, abi, provider.getSigner(acct.address, acct.privateKey));
+	let wallet = new ethers.wallet('339f6454f15bb8c6cbbf2a4203a37ee38422714aef21052b87b68593219fdc00', web3);
+	let contract = new ethers.Contract(TrustChainAddress, abi, wallet) ;
 		console.log('contract', contract);
 		contract.sendMoney(id, money)
 		.then(function(transaction){
@@ -306,11 +313,14 @@ export const loadTrustChainData = () => async(dispatch) => {
 	
 	const contract = new web3.eth.Contract(abi, TrustChainAddress);
 	contract.methods.requestCount().call().then((requestCount)=>{
+		console.log("request count", requestCount)
 		
-		for(let i =2; i<=requestCount; i++){
+		for(let i =1; i<=requestCount; i++){
 			contract.methods.request(i).call().then(async(request)=>{
+				console.log(request.requestHash)
 				if(!request.fulfilled){
 				  const concat = require('it-concat')
+				  console.log(request.requestHash)
 				  const  Data =  await concat(ipfs.cat(request.requestHash));
 				   const trustChainData  = JSON.parse(Data.toString());
 				   dataArray.push(trustChainData);

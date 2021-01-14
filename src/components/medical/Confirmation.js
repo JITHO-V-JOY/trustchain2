@@ -60,10 +60,9 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   });
    const result = await ipfs.add(requestData);
    console.log('result ', result);
-   addRequest('QmeQT4wpPkwyRtQmM4f9wMxYnShNjqcTAdd2sj1e19dj8y', amount);
+   addRequest(result.cid, amount);
    toggle()
-  
-  
+   
 }
 
  const RenderRequest = () =>{
