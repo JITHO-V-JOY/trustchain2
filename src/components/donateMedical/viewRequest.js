@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
 	},
   }));
 
-  function RenderRequest({Data}){
+  function RenderRequest({Data, verify, request}){
 	const classes = useStyles();
-	
+
 	const list = Data.map((data, index)=>{
 		console.log(index);
 	const  _arrayBufferToBase64 = ( buffer ) => {
@@ -60,7 +60,11 @@ const useStyles = makeStyles((theme) => ({
 			  <Media heading>
 			  {data.name}
 			  </Media>
-			  {`-${data.request}`}
+			  {`- ${data.request}`}
+			  <br/>
+			  <br/>
+			  {` Amount Needed - ${request[index].amount}, Amount Collected - ${verify[index].collectedAmount}`}
+			  <br/>
 			  <br/>
 			  <Button component={Link} to={`/viewMedicallRequest/${index}`} color="primary" className="mt-2">View</Button>
 			</Media>
@@ -324,7 +328,7 @@ export default class Request extends Component{
                   
                 
 				</div>
-				<RenderRequest Data = {this.props.Data}/>
+				<RenderRequest Data = {this.props.Data} verify = {this.props.verify} request = {this.props.requestStatus} />
             
             </div>
         );

@@ -300,6 +300,7 @@ export const loadTrustChainData = () => async(dispatch) => {
 	console.log("hello")
 	dispatch(trustChainDataLoading());
 	const dataArray = []
+	const verifyArray = []
 	const requestArray = []
 	const requestCountArray = []
 	
@@ -320,6 +321,11 @@ export const loadTrustChainData = () => async(dispatch) => {
 					console.log(i);
 				}
 			})
+
+			contract.methods.verify(i).call().then(async(verify)=>{	
+					verifyArray.push(verify);
+   
+			})
 		}
 	}, error =>{ var errmess = new Error(error.message);
 		console.log('error', errmess);
@@ -328,6 +334,8 @@ export const loadTrustChainData = () => async(dispatch) => {
 	.then(()=>{
 		dispatch(addTrustChainRequest(requestArray))
 		console.log('request', requestArray);	
+		dispatch(addTrustChainVerify(verifyArray))
+		console.log('verify', verifyArray);
 		dispatch(addTrustChainRequestId(requestCountArray))
 		console.log('requestCount', requestCountArray);	
 		dispatch(addTrustChainData(dataArray))
@@ -350,6 +358,10 @@ export const  trustChainDataFailed = (msg) =>({
 export const addTrustChainRequest = (requestArray) => ({
 	type: ActionTypes.ADD_TRUSTCHAIN_REQUEST,
 	payload: requestArray
+});
+export const addTrustChainVerify = (verifyArray) => ({
+	type: ActionTypes.ADD_TRUSTCHAIN_VERIFY,
+	payload: verifyArray
 });
 
 export const addTrustChainRequestId = (requestCount) => ({

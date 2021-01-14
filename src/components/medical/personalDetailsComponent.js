@@ -215,7 +215,7 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                             </div>
 
                           <Button
-                            onClick = {()=>{
+                            /*onClick = {()=>{
                               return fetch("https://aadhaarverify1.p.rapidapi.com/Uidverifywebsvcv1/Uidverify", {
                                 "method": "POST",
                                 "headers": {
@@ -239,6 +239,8 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                                 console.error(err);
                               });
                             }}
+                            */
+                            type= 'submit'
                             variant='contained'
                             color='primary'
                             className={classes.button}
