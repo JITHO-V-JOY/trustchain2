@@ -94,10 +94,11 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                     initialValues={medicalData}
                     onSubmit={values => {
 
-                    
                     convertImage(values.image);
                     convertID(values.id);
                     console.log('values', values);
+                    
+                    /*
                     var unirest = require("unirest");
 
                       var req = unirest("POST", "https://aadhaarverify1.p.rapidapi.com/Uidverifywebsvcv1/Uidverify");
@@ -123,6 +124,7 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                         console.log("helloo")
                         console.log(res.body);
                       });
+                    */
                     setMedicalData(values);
                     nextStep();
                     }}
