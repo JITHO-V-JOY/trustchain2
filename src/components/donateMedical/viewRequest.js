@@ -48,9 +48,11 @@ const useStyles = makeStyles((theme) => ({
 	const imageUrl = arrayBufferView.toString('base64');
 		console.log('hello', imageUrl)
 		const imgStyle = {
-			maxHeight: 128,
-			maxWidth: 128
+			maxHeight: 100,
+			maxWidth: 100
 		  }
+
+		
 		return (
 			<Media key={index}>
 			<Media left href="/home">
@@ -58,12 +60,13 @@ const useStyles = makeStyles((theme) => ({
 			</Media>
 			<Media body>
 			  <Media heading>
-			  {data.name}
+			  <h4 style={{tabSize: 4}}>{data.name}</h4>
 			  </Media>
-			  {`- ${data.request}`}
+
+			  {`  -  ${data.request}`}
 			  <br/>
 			  <br/>
-			  {` Amount Needed - ${request[index].amount}, Amount Collected - ${verify[index].collectedAmount}`}
+			  {`  Amount Needed - ${request[index].amount}, Amount Collected - ${verify[index].collectedAmount}`}
 			  <br/>
 			  <br/>
 			  <Button component={Link} to={`/viewMedicallRequest/${index}`} color="primary" className="mt-2">View</Button>

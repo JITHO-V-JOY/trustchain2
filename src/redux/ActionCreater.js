@@ -267,11 +267,11 @@ export const requestSuccess = () =>({
 });
 
 
-export const payForRequested =(id, money) => async(dispatch) => {
+export const payForRequested = (id, money) => async(dispatch) => {
 	dispatch(payLoading());
-	//let privatekey ="0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9";
+	let privatekey ="0xf78c843cf18966a92e63c82a9ac9e0b0839c6eb32405093cf2c96db2c1f732f9";
 	//let  wallet = new ethers.Wallet(privatekey).connect(provider)
-	let wallet = new ethers.wallet('339f6454f15bb8c6cbbf2a4203a37ee38422714aef21052b87b68593219fdc00', web3);
+	let wallet = new ethers.Wallet(privatekey, provider);
 	let contract = new ethers.Contract(TrustChainAddress, abi, wallet) ;
 		console.log('contract', contract);
 		contract.sendMoney(id, money)
@@ -318,7 +318,7 @@ export const loadTrustChainData = () => async(dispatch) => {
 		for(let i =1; i<=requestCount; i++){
 			contract.methods.request(i).call().then(async(request)=>{
 				console.log(request.requestHash)
-				if(!request.fulfilled){
+				if(!request.fulfilled && request.requestHash != ""){
 				  const concat = require('it-concat')
 				  console.log(request.requestHash)
 				  const  Data =  await concat(ipfs.cat(request.requestHash));

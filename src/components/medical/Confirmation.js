@@ -59,8 +59,8 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   comments:[]
   });
    const result = await ipfs.add(requestData);
-   console.log('result ', result);
-   addRequest(result.cid, amount);
+   console.log('result ', result.path);
+   addRequest(result.path, amount);
    toggle()
    
 }

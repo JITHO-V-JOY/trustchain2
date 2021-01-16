@@ -8,9 +8,12 @@ import DonateHome from './donateHomeComponent';
 import HomeRequest from './home/homeRequestComponent';
 import Request from './donateMedical/viewRequest';
 import ViewNeedy from './donateMedical/viewNeedy';
-import { Switch, Route, Redirect, withRouter, useParams } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter, useParams, Router } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {incStatus, loadTrustChainData, payForRequested, addRequest} from '../redux/ActionCreater';
+import Loader from './medical/loader';
+
+import history from './history';
 
 
 const mapStateToProps = (state) => {
@@ -62,8 +65,11 @@ class Main extends Component{
             
         }
          return(
+
+            
              <div>
              <Header />
+             <Router history={history}>
              <Switch>      
                 <Route path="/home" component = {()=><Home images={this.props.images}/>}/>
                 <Route path="/request" component = {()=><RequestHome images={this.props.images}/>}/>
@@ -75,8 +81,11 @@ class Main extends Component{
 
                 <Redirect to="/home" />
              </Switch>
+             </Router>
              <Footer />
              </div>
+             
+            
              
               
          );

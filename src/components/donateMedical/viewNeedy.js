@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import {Button } from 'reactstrap';
 import {Form, Input, FormGroup, Label} from 'reactstrap';
+import history from '../history'
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 
@@ -9,12 +10,19 @@ export default function ViewNeedy({data,  requestCount, payment, payForRequested
     const dispatch = useDispatch();
 
     const [comment, setComment] = useState('Help him...');
+    const [amount, setAmount] = useState(0);
     console.log('comment', comment);
     const addComment = async() =>{
             data.comments.push(comment);
             console.log('data', data);
         await ipfs.files.write('/QmeQT4wpPkwyRtQmM4f9wMxYnShNjqcTAdd2sj1e19dj8y', data);
 
+    }
+
+    const handleChange =(event)=>{
+            let value = event.target.value;
+            console.log(value)
+            setAmount(value);
     }
     console.log('data', data)
     const  _arrayBufferToBase64 = ( buffer ) => {
@@ -70,16 +78,28 @@ export default function ViewNeedy({data,  requestCount, payment, payForRequested
         <hr></hr>
             <div className="row">
                 <div className="col-12 col-md-6 mt-1">
+            
                 <h3>{`Pay For ${data.name}`}</h3>
-                <Button onClick={()=> payForRequested(requestCount, 1000) }>PAY</Button>
+                <form>
+                <input type="number" name="comment" id="comment" placeholder="Enter the amount you want to donate" onChange={handleChange} />
+                </form>
+                <br/>
 
+                      <Button onClick={() => {
+                        console.log(amount)
+                        payForRequested(requestCount, amount)
+                        history.push('/donate')}}>PAY</Button>
+        
+                 
                 </div>
+
+              
             </div>
     
         <hr></hr>
             <div className="row">
                 <div className = "col-12 col-md-12 mt-2">
-                        <Form onSubmit={(values) => console.log(values)}>
+                        <Form onSubmit={(values) => history.push('/home')}>
                           <FormGroup>
                             <Label for="comment">Add Comment</Label>
                             <Input type="textarea" name="comment" id="comment" placeholder="write your comment" onChangeText={(value) => setComment(value)} />
