@@ -2,11 +2,13 @@ import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import {Button } from 'reactstrap';
 import {Form, Input, FormGroup, Label} from 'reactstrap';
-import history from '../history'
+import history from '../history';
+import PDFViewer from 'pdf-viewer-reactjs'
+
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 
-export default function ViewNeedy({data,  requestCount, payment, payForRequested}){
+export default function ViewNeedy({data,  requestCount, payment, payForRequested, requestStatus, req}){
     const dispatch = useDispatch();
 
     const [comment, setComment] = useState('Help him...');
@@ -36,6 +38,8 @@ export default function ViewNeedy({data,  requestCount, payment, payForRequested
     }
 
     let Image = _arrayBufferToBase64(data.image.data)
+    let verificationDoc = _arrayBufferToBase64(data.id.data)
+
     console.log('base64',Image);
 
     
@@ -78,9 +82,20 @@ export default function ViewNeedy({data,  requestCount, payment, payForRequested
         </div>
         <hr></hr>
             <div className="row">
-                <div className="col-12 col-md-6 mt-1">
+                <div className="col-12 col-md-12 mt-1">
+
+                <h4>Verification Document</h4>
+
+                    <PDFViewer
+                        document={{
+                            base64:  verificationDoc
+                        }}
+                    />
             
                 <h3>{`Pay For ${data.name}`}</h3>
+                <br />
+                <br />
+                <h4>{`Amount Needed ${requestStatus[req].amount}`}</h4>
                 <form>
                 <input type="number" name="comment" id="comment" placeholder="Enter the amount you want to donate" onChange={handleChange} />
                 </form>

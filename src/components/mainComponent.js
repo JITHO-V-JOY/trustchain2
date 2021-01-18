@@ -61,6 +61,9 @@ class Main extends Component{
                       requestCount  = {this.props.requestCount[requestId]}
                       paymentStatus = {this.props.payment}
                        payForRequested = {this.props.payForRequested}
+                       requestStatus = {this.props.request}
+                       req = {requestId}
+
             />
             );
             
@@ -77,6 +80,9 @@ class Main extends Component{
                        requestCount  = {this.props.requestCount[requestId]}
                        paymentStatus = {this.props.payment}
                        payForRequested = {this.props.payForRequested}
+                       requestStatus = {this.props.request}
+                       req = {requestId}
+
             />
             );
         }

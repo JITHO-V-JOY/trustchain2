@@ -61,7 +61,6 @@ const Login = ()=> {
           <select name = "role" value={Role} onChange = {handleChange}>
           <option value="decision-maker">Decision Maker</option>
           <option value="village-officer">Village Officer</option>
-          <option value="user">User</option>
           </select>
         </label>
         <br/>

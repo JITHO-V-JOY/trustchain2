@@ -62,28 +62,32 @@ const useStyles = makeStyles((theme) => ({
 
   const[medicalData, setMedicalData] = useState({
       name: '',
+      email: '',
       state:'' ,
       address:'',
       phno:'',
+      adhar:'',
       image: '',
       id: '',
       hName:'',
       hAddress:'',
       hPhno:'',
       doctor:'',
-      mCert:'',
-      accountHolder:'',
-      accountNumber:'',
-      IFSC:'',
+      mCert:'000',
+      bemail:'', 
       amount:'',
       request:'',
       agree:false,
       arrayImage:'',
       arrayID: '',
-      arrayMcert:''
+      arrayMcert:'000'
 
   });
-
+ /*
+  accountHolder:'',
+      accountNumber:'',
+      IFSC:'',
+ */
     
    const nextStep = () => setStep(prev => prev + 1);
    const prevStep = () => setStep(prev => prev - 1);
@@ -142,7 +146,6 @@ const useStyles = makeStyles((theme) => ({
                             medicalData={medicalData}
                             arrayImage={arrayImage}
                             arrayID={arrayID}
-                            arrayMcert={arrayMcert}
                             addRequest={addRequest}
                             requestStatus={requestStatus}
                             />   

@@ -29,10 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
   }));
 
-export default function Confirmation ({ medicalData, prevStep, nextStep , arrayImage, arrayMcert, arrayID, addRequest, requestStatus}){
+export default function Confirmation ({ medicalData, prevStep, nextStep , arrayImage, arrayID, addRequest, requestStatus}){
   const classes = useStyles();
-  const { name, state, address, phno, image, id, hName, hAddress, hPhno,doctor,  mCert, accountHolder, accountNumber
-  , IFSC, amount, request} = medicalData;
+  const { name, email,  state, address, phno, adhar, image, id, hName, hAddress, hPhno,doctor,  mCert, bemail, amount, request} = medicalData;
   const dispatch = useDispatch();
   const [requestLoading, setRequestLoading] = useState(requestStatus.isLoading);
   const [requestErr, setRequestErr] = useState(requestStatus.errMess);
@@ -40,22 +39,49 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(modal => modal = !modal);
 
+  const sendEmailTOc = (templateId, variables) =>{
+    window.emailjs.send(
+      "service_gp9ndoc", templateId,
+      variables
+      ).then(res => {
+        console.log('Email successfully sent!')
+      })
+      // Handle errors here however you like, or use a React error boundary
+      .catch(err => console.error('Oh well, you failed. Here some thoughts on the error that occured:', err))
+    }
+
+    const sendEmailTOb = (templateId, variables) =>{
+      window.emailjs.send(
+        "service_gp9ndoc", templateId,
+        variables
+        ).then(res => {
+          console.log('Email successfully sent!')
+        })
+        // Handle errors here however you like, or use a React error boundary
+        .catch(err => console.error('Oh well, you failed. Here some thoughts on the error that occured:', err))
+      }
+
   const addMedical = async() =>{
   const requestData = JSON.stringify({category: 'medical',
   name: name,
+  email: email,
   state: state,
   address: address,
   phno: phno,
+  adhar: adhar,
   image: arrayImage,
   id: arrayID,
   hName: hName,
   hAddress:hAddress,
   hPhno: hPhno,
   doctor:doctor,
-  mCert: arrayMcert,
+  
+/*
   accountHolder: accountHolder,
   accountNumber: accountNumber,
   IFSC: IFSC,
+  */
+  bemail: bemail,
   amount: amount,
   request: request,
   comments:[]
@@ -100,11 +126,43 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   }
   client.sms.message(messageCallback, phoneNumber, message, messageType);
   */
+  let otp = Math.floor(100000 + Math.random() * 900000)
+  let templateId = 'template_3zrzj0f'
+  let message = "Adhar no : " + adhar + "   Id : " + otp
+
+  sendEmailTOc(templateId, { message: message, from_name: 'CAREBLOCKS', reply_to: email, to_email: email})
+  sendEmailTOb(templateId, { message: message, from_name: 'CAREBLOCKS', reply_to: bemail, to_email: bemail})
+
+/*
+
+  const client = new SMTPClient({
+    user: 'careblocks 7',
+    password: 'careblocks@123',
+    host: 'smtp.gmail.com',
+    ssl: true,
+  });
+
+
+  client.send(
+    {
+      text: `CAREBLOCKS Adhar no : ${adhar}, Your id : ${otp}`,
+      from: 'careblocks77@gmail.com',
+      to: `${bemail}, ${email} `,
+      cc: 'jithovjoy@cet.ac.in',
+      subject: 'CAREBLOCKS',
+    },
+    (err, message) => {
+      console.log(err || message);
+      alert(err || message)
+    }
+  );
+ */
 
    const result = await ipfs.add(requestData);
    console.log('result ', result.path);
    addRequest(result.path, amount);
    toggle()
+   
    
 }
 
@@ -139,6 +197,7 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   
 
       <div>
+       
       <div>
             <Modal isOpen={modal} toggle={toggle}>
               <ModalHeader toggle={toggle}>Adding Request</ModalHeader>
@@ -214,32 +273,7 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
               className={classes.textCenter}
             />
           </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={`Medical Certificate : ${mCert.name}`}
-              className={classes.textCenter}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={`Account Holder : ${accountHolder}`}
-              className={classes.textCenter}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={`Account Number : ${accountNumber}`}
-            
-              className={classes.textCenter}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemText
-              primary={`IFSC Code : ${IFSC}`}
-
-              className={classes.textCenter}
-            />
-          </ListItem>
+         
           <ListItem>
             <ListItemText
               primary={`Amount : ${amount}`}
@@ -268,7 +302,10 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
             color='primary'
             variant='contained'
             className={classes.button}
-            onClick={() => addMedical()}
+            onClick={() => {
+              
+              
+              addMedical()}}
           >
             Confirm & Continue
           </Button>
@@ -276,6 +313,35 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
       </div>
     
   );
+  /* 
+  
+               <ListItem>
+            <ListItemText
+              primary={`Medical Certificate : ${mCert.name}`}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={`Account Holder : ${accountHolder}`}
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={`Account Number : ${accountNumber}`}
+            
+              className={classes.textCenter}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary={`IFSC Code : ${IFSC}`}
+
+              className={classes.textCenter}
+            />
+          </ListItem>
+  */
 };
 
 Confirmation.propTypes = {
@@ -284,7 +350,6 @@ Confirmation.propTypes = {
   nextStep: PropTypes.func.isRequired,
   arrayImage: PropTypes.object.isRequired,
   arrayID: PropTypes.object.isRequired,
-  arrayMcert: PropTypes.object.isRequired,
   addRequest: PropTypes.func.isRequired,
   requestStatus: PropTypes.object.isRequired,
 
