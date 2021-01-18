@@ -60,7 +60,7 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   request: request,
   comments:[]
   });
-
+/*
   const Http = new XMLHttpRequest();
   const url =    "http://cloud.smsindiahub.in/vendorsms/pushsms.aspx?user=jitho&password=z8bZ7.QMMyehjgf=9746176014,9895352674&sid=WEBSMS&msg=test%20message&fl=0&gwid=2"
   Http.open("GET", url);
@@ -101,9 +101,9 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   client.sms.message(messageCallback, phoneNumber, message, messageType);
   */
 
-   //const result = await ipfs.add(requestData);
-   //console.log('result ', result.path);
-   //addRequest(result.path, amount, hphno);
+   const result = await ipfs.add(requestData);
+   console.log('result ', result.path);
+   addRequest(result.path, amount);
    toggle()
    
 }

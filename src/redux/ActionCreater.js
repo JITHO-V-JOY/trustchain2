@@ -337,16 +337,17 @@ export const loadTrustChainData = () => async(dispatch) => {
 				   dataArray.push(trustChainData);
 				   requestArray.push(request);
 				   requestCountArray.push(i);
+				   contract.methods.verify(i).call().then(async(verify)=>{	
+					verifyArray.push(verify);
+   
+			})
 				}
 				else{
 					console.log(i);
 				}
 			})
 
-			contract.methods.verify(i).call().then(async(verify)=>{	
-					verifyArray.push(verify);
-   
-			})
+			
 		}
 	}, error =>{ var errmess = new Error(error.message);
 		console.log('error', errmess);

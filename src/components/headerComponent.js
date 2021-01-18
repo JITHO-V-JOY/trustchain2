@@ -42,9 +42,7 @@ function  Header(){
                                 <button onClick={()=> history.push('/home')} >Home</button>              
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink href="/about">
-                                    About Us
-                                    </NavLink>
+                                <button onClick={()=> history.push('/home')} >About Us</button>              
                                 </NavItem>
                                 <NavItem >
                                 <button onClick={()=> history.push('/donate')}> Donate</button>

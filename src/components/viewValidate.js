@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import {Button } from 'reactstrap';
 import {Form, Input, FormGroup, Label} from 'reactstrap';
 import history from './history'
-import {incStatus, loadTrustChainData, payForRequested, addRequest} from '../redux/ActionCreater';
 
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
@@ -90,7 +89,7 @@ export default function ViewValidate({data,  requestCount, payment, payForReques
 
                       <Button onClick={() => {
                         console.log(amount)
-                        dispatch(payForRequested(requestCount, amount))
+                        payForRequested(requestCount, amount)
                         history.push('/validate')}}>VALIDATE</Button>
         
                  
