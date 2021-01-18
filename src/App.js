@@ -6,6 +6,8 @@ import { ConfigureStore } from './redux/configureStore';
 import Main from './components/mainComponent';
 const store = ConfigureStore();
 
+
+
 function App() {
   return (
     <Provider store={store}>

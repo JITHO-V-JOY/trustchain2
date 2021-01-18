@@ -7,6 +7,7 @@ import {Person} from './addPerson';
 import {TrustChainData} from './addTrustChainData';
 import {Payment} from './addPayment';
 import {Request} from './addRequest';
+import {User} from './addUser';
 
 
 export const ConfigureStore =()=>{
@@ -17,7 +18,8 @@ export const ConfigureStore =()=>{
             Person: Person,
             TrustChainData: TrustChainData,
             Payment: Payment,
-            Request: Request
+            Request: Request,
+            User: User
            
         }),
         applyMiddleware(thunk, logger)

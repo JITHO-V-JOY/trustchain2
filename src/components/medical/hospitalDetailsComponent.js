@@ -123,7 +123,7 @@ function HospitalDetails({medicalData, nextStep, prevStep, setMedicalData, setAr
                      helperText={touched.doctor && errors.doctor}
                      />
                      <div className={classes.select}>
-                     <label for="id">Upload Your Medical Certificate</label>
+                     <label for="id">Upload Your Verification document</label>
                      <Field component={SimpleFileUpload} 
                      InputProps={{ disableUnderline: true }}
                      name="mCert" label={medicalData.mCert.name}

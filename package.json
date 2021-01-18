@@ -12,6 +12,7 @@
     "bootstrap-social": "^5.1.1",
     "crypto-js": "^4.0.0",
     "ethers": "^5.0.7",
+    "firebase": "^5.10.1",
     "font-awesome": "^4.7.0",
     "formik": "^2.1.5",
     "formik-material-ui": "^3.0.0-alpha.0",
@@ -28,6 +29,7 @@
     "redux-logger": "3.0.6",
     "redux-thunk": "2.2.0",
     "semantic-ui-react": "^1.0.0",
+    "telesignsdk": "^2.2.1",
     "unirest": "^0.6.0",
     "web3": "^1.2.11",
     "yup": "^0.29.1"

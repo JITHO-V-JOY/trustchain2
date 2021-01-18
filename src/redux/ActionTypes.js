@@ -14,3 +14,5 @@ export const ADD_REQUEST_LOADING = "ADD_REQUEST_LOADING";
 export const ADD_REQUEST_FAILED = "ADD_REQUEST_FAILED";
 export const ADD_COMMENT = "ADD_COMMENT";
 
+export const ADD_USER = "ADD_USER";
+

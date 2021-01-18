@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
@@ -9,6 +10,7 @@ import { useDispatch } from "react-redux";
 import {medicalDetails} from '../../redux/ActionCreater';
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
+var TeleSignSDK = require('telesignsdk');
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -58,9 +60,50 @@ export default function Confirmation ({ medicalData, prevStep, nextStep , arrayI
   request: request,
   comments:[]
   });
-   const result = await ipfs.add(requestData);
-   console.log('result ', result.path);
-   addRequest(result.path, amount);
+
+  const Http = new XMLHttpRequest();
+  const url =    "http://cloud.smsindiahub.in/vendorsms/pushsms.aspx?user=jitho&password=z8bZ7.QMMyehjgf=9746176014,9895352674&sid=WEBSMS&msg=test%20message&fl=0&gwid=2"
+  Http.open("GET", url);
+  Http.send();
+  
+  Http.onreadystatechange = (e) => {
+    console.log(Http.responseText)
+  }
+  /*
+  const customerId = "3F41F293-DC1A-487E-9DF8-DAA348D2ADB5";
+  const apiKey = "aBQ+4QeI9dbI/IvMyk+anhEDNsRVMrimc0ljfgZTRs9R4JkhrUTprn98e7fc27ntDI9iQeqNc6PDzdaEYVhyOQ==";
+  const rest_endpoint = "https://rest-api.telesign.com";
+  const timeout = 10*1000; // 10 secs
+
+  const client = new TeleSignSDK( customerId,
+      apiKey,
+      rest_endpoint,
+      timeout // optional
+      // userAgent
+  );
+
+  const phoneNumber = phno;
+  const message = "You're scheduled for a dentist appointment at 2:30PM.";
+  const messageType = "ARN";
+
+  console.log("## MessagingClient.message ##");
+  
+
+  function messageCallback(error, responseBody) {
+      if (error === null) {
+          console.log(`Messaging response for messaging phone number: ${phoneNumber}` +
+              ` => code: ${responseBody['status']['code']}` +
+              `, description: ${responseBody['status']['description']}`);
+      } else {
+          console.error("Unable to send message. " + error);
+      }
+  }
+  client.sms.message(messageCallback, phoneNumber, message, messageType);
+  */
+
+   //const result = await ipfs.add(requestData);
+   //console.log('result ', result.path);
+   //addRequest(result.path, amount, hphno);
    toggle()
    
 }

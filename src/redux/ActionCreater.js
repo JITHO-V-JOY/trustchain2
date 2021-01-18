@@ -1,3 +1,4 @@
+
 import * as ActionTypes from './ActionTypes';
 import CryptoJS from 'crypto-js';
 const Web3 = require('web3');
@@ -32,7 +33,6 @@ const gsnConfig = configureGSN({
 	relayLookupWindowBlocks: 1e5
 });
 const gsnProvider = new RelayProvider((new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c1633c281b39417eb2d061c5479a68f7'))).currentProvider, gsnConfig);
-
 //const provider = new ethers.providers.Web3Provider(gsnProvider);
 var acct = provider.provider.newAccount();
 */
@@ -266,6 +266,17 @@ export const requestSuccess = () =>({
 	type: ActionTypes.ADD_REQUEST
 });
 
+export const addUser = (role) => (dispatch)=>{
+	console.log("hello")
+	console.log(role)
+	dispatch(addusertype(role));
+}
+
+export const addusertype = (role) =>({
+	type: ActionTypes.ADD_USER,
+	payload: role
+});
+
 
 export const payForRequested = (id, money) => async(dispatch) => {
 	dispatch(payLoading());
@@ -383,5 +394,4 @@ export const addTrustChainData = (dataArray) => ({
 	type: ActionTypes.ADD_TRUSTCHAIN_DATA,
 	payload: dataArray
 });
-
 

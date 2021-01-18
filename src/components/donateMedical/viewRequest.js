@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 			maxWidth: 100
 		  }
 
-		
+		if(verify[index].valid !=0 ){
 		return (
 			<Media key={index}>
 			<Media left href="/home">
@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
 			 
 	
 		  );
+		}
 	})
 	    return(
 			<div>

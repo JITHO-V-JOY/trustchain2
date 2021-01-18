@@ -2,11 +2,14 @@ import React, {useState} from 'react';
 import { useDispatch } from "react-redux";
 import {Button } from 'reactstrap';
 import {Form, Input, FormGroup, Label} from 'reactstrap';
-import history from '../history'
+import history from './history'
+import {incStatus, loadTrustChainData, payForRequested, addRequest} from '../redux/ActionCreater';
+
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 
-export default function ViewNeedy({data,  requestCount, payment, payForRequested}){
+
+export default function ViewValidate({data,  requestCount, payment, payForRequested}){
     const dispatch = useDispatch();
 
     const [comment, setComment] = useState('Help him...');
@@ -38,7 +41,6 @@ export default function ViewNeedy({data,  requestCount, payment, payForRequested
     let Image = _arrayBufferToBase64(data.image.data)
     console.log('base64',Image);
 
-    
     return(
         <div className="container mt-5">
             <div className="row">
@@ -61,7 +63,7 @@ export default function ViewNeedy({data,  requestCount, payment, payForRequested
                   <p><b>State : </b>{` ${data.state}`}</p><br/>
                   <p><b>Address : </b>{` ${data.address}`}</p><br/>
                   <p><b>Phone : </b>{` ${data.phno}`}</p><br/>
-               
+                
             </div>
             <div className="col-12 col-md mt-1">
                 <h4>
@@ -82,14 +84,14 @@ export default function ViewNeedy({data,  requestCount, payment, payForRequested
             
                 <h3>{`Pay For ${data.name}`}</h3>
                 <form>
-                <input type="number" name="comment" id="comment" placeholder="Enter the amount you want to donate" onChange={handleChange} />
+                <input type="number" name="comment" id="comment" placeholder="Enter an amount to validate (min 1 rupee)" onChange={handleChange} />
                 </form>
                 <br/>
 
                       <Button onClick={() => {
                         console.log(amount)
-                        payForRequested(requestCount, amount)
-                        history.push('/donate')}}>PAY</Button>
+                        dispatch(payForRequested(requestCount, amount))
+                        history.push('/validate')}}>VALIDATE</Button>
         
                  
                 </div>

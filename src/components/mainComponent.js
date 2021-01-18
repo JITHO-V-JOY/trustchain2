@@ -12,9 +12,10 @@ import { Switch, Route, Redirect, withRouter, useParams, Router } from 'react-ro
 import { connect } from 'react-redux';
 import {incStatus, loadTrustChainData, payForRequested, addRequest} from '../redux/ActionCreater';
 import Loader from './medical/loader';
-
+import Login from './login';
 import history from './history';
-
+import Validate from './validate';
+import ViewValidate from './viewValidate';
 
 const mapStateToProps = (state) => {
     return {
@@ -64,6 +65,21 @@ class Main extends Component{
             );
             
         }
+
+    const ViewValidateId = ({match}) => {
+            const {requestId} = match.params;
+            console.log('requestID', requestId)
+            console.log(this.props.trustChainData)
+            console.log(this.props.trustChainData.filter((arrData, index, arr)=> index === Number(requestId))[0])
+            return(
+                <ViewValidate data = {this.props.trustChainData.filter((arrData, index, arr)=> index === Number(requestId))[0]}
+                      // request  ={} //{this.props.request.filter((request, index, arrr)=> index === Number(requestId))[0]}
+                       requestCount  = {this.props.requestCount.filter((requestCount, index, arr)=> index === Number(requestId))[0]}
+                       paymentStatus = {this.props.payment}
+                       payForRequested = {this.props.payForRequested}
+            />
+            );
+        }
          return(
 
             
@@ -74,11 +90,13 @@ class Main extends Component{
                 <Route path="/home" component = {()=><Home images={this.props.images}/>}/>
                 <Route path="/request" component = {()=><RequestHome images={this.props.images}/>}/>
                 <Route path="/donate" component = {()=><DonateHome images={this.props.images}/>}/>
+                <Route path ="/login" component = {()=><Login />}/>
                 <Route path="/requestMedical" component = {() => <Medical addRequest = {this.props.addRequest} requestStatus = {this.props.request}/>} />
                 <Route path="/requestHome" component = {() => <HomeRequest />} />
                 <Route path="/viewMedicalRequest" component = {() => <Request Data = {this.props.trustChainData} verify = {this.props.verify} requestStatus = {this.props.request} />}/>
                 <Route path="/viewMedicallRequest/:requestId" component = {({match}) => <ViewRequestId match={match} />} />
-
+                <Route path="/validate" component = {() => <Validate Data = {this.props.trustChainData} verify = {this.props.verify} requestStatus = {this.props.request} />}/>
+                <Route path="/viewValidate/:requestId" component = {({match}) => <ViewValidateId match={match} />} />
                 <Redirect to="/home" />
              </Switch>
              </Router>
