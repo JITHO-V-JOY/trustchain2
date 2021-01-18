@@ -28,10 +28,10 @@ const useStyles = makeStyles(theme => ({
   }));
 
   const validationSchema = yup.object({
-     accountHolder: yup
+     bemail: yup
       .string()
       .required(' Name is required'),
-
+/*
      accountNumber: yup
       .string()
       .required('Account Number is Required'),
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     IFSC: yup
       .string()
       .required('IFSC code is Required'),
-      
+     */ 
     amount: yup
       .string()
       .required('Amount is Required')
@@ -62,6 +62,7 @@ function BankDetails({medicalData, nextStep, prevStep, setMedicalData}){
                   <Formik
                   initialValues={medicalData}
                   onSubmit={values => {
+                    console.log('values', values);
                     setMedicalData(values);
                     direction === 'back' ? prevStep() : nextStep();
                   }}
@@ -70,32 +71,14 @@ function BankDetails({medicalData, nextStep, prevStep, setMedicalData}){
                      {({ errors, touched }) => (
                          <Form className={classes.form} >
                            <Field
-                             name='accountHolder'
-                             label='Account Holder *'
+                             name='bemail'
+                             label='bemail'
                              margin='normal'
                              as={TextField}
-                             error={touched.accountHolder&& errors.accountHolder}
-                             helperText={touched.accountHolder && errors.accountHolder}
+                             error={touched.bemail&& errors.bemail}
+                             helperText={touched.bemail && errors.bemail}
                            />
-                           <Field
-                           type="number"
-                           name='accountNumber'
-                           label='Account Number *'
-                           margin='normal'
-                           as={TextField}
-                           error={touched.accountNumber && errors.accountNumber}
-                           helperText={touched.accountNumber && errors.accountNumber}
-                         />
-                          
-                           
-                             <Field
-                             name='IFSC'
-                             label='IFSC Code *'
-                             margin='normal'
-                             as={TextField}
-                             error={touched.IFSC && errors.IFSC}
-                             helperText={touched.IFSC && errors.IFSC}
-                             />
+                             
                              <Field
                              name='amount'
                              label='Amount You Need *'
@@ -137,6 +120,31 @@ function BankDetails({medicalData, nextStep, prevStep, setMedicalData}){
     
            
         );
+
+
+        /*
+        
+        
+            <Field
+                           type="number"
+                           name='accountNumber'
+                           label='Account Number *'
+                           margin='normal'
+                           as={TextField}
+                           error={touched.accountNumber && errors.accountNumber}
+                           helperText={touched.accountNumber && errors.accountNumber}
+                         />
+                          
+                           
+                             <Field
+                             name='IFSC'
+                             label='IFSC Code *'
+                             margin='normal'
+                             as={TextField}
+                             error={touched.IFSC && errors.IFSC}
+                             helperText={touched.IFSC && errors.IFSC}
+                             />
+        */
     }
 
 

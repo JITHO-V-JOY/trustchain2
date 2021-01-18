@@ -11,7 +11,7 @@ const configureGSN = require('@opengsn/gsn/dist/src/relayclient/GSNConfigurator'
 */
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
-const TrustChainAddress =  '0x67ba8919f54E188F7a7e62D9d8a007350EE8fCB6'; //'0x4D8BBf5A16Fdc02340a34132E62391Ee782B79a1';
+const TrustChainAddress = '0x8Ff3cfD2c62B670AEff887Ee7554F863e7Ab3660';  //'0x67ba8919f54E188F7a7e62D9d8a007350EE8fCB6'; //'0x4D8BBf5A16Fdc02340a34132E62391Ee782B79a1';
 const web3 = new Web3( new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c1633c281b39417eb2d061c5479a68f7'));
 
 /*

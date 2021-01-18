@@ -36,6 +36,10 @@ const useStyles = makeStyles(theme => ({
       .string()
       .required('Full Name is required')
       .max(20),
+    email: yup
+      .string()
+      .required('email is required')
+      .max(50),
     state: yup
       .string()
       .required('State is Required')
@@ -47,7 +51,7 @@ const useStyles = makeStyles(theme => ({
       .string()
       .required('Phone Number is Required')
       .min(10),
-    adhaar: yup
+    adhar: yup
       .string()
       .required('Adhaar number is Required'),
     image: yup
@@ -141,7 +145,16 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                             error={touched.name && errors.name}
                             helperText={touched.name && errors.name}
                           />
-                    
+                        <Field
+                            
+                            name='email'
+                            label='Email'
+                            margin='normal'
+                            as={TextField}
+                            error={touched.email && errors.email}
+                            helperText={touched.email && errors.email}
+                          />
+                
                           <FormControl name="state"
                           
                           className={classes.select}>
@@ -184,12 +197,12 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                             />
                             <Field
                             type="number"
-                            name='adhaar'
+                            name='adhar'
                             label='Adhaar Number*'
                             margin='normal'
                             as={TextField}
-                            error={touched.adhaar&& errors.adhaar}
-                            helperText={touched.adhaar && errors.adhaar}
+                            error={touched.adhar&& errors.adhar}
+                            helperText={touched.adhar && errors.adhar}
                             />
                             <div className={classes.select}>
                             <label for="image">Upload Your Image</label>
@@ -206,7 +219,7 @@ function PersonalDetails({medicalData, nextStep, setMedicalData, setArrayImage, 
                             </div>
                            
                             <div className={classes.select}>
-                            <label for="id">Upload Your ID</label>
+                            <label for="id">Upload Verification document</label>
                             <Field component={SimpleFileUpload} 
                             InputProps={{ disableUnderline: true }}
                             name="id" 

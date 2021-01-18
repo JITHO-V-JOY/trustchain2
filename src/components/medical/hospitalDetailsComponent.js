@@ -45,8 +45,10 @@ const useStyles = makeStyles(theme => ({
       .string()
       .required('Doctor is Required')
       .max(20),
+      /*
     mCert: yup.string()
     .required("Medical Certificate is Required ")
+    */
     
   });
 
@@ -54,6 +56,8 @@ const useStyles = makeStyles(theme => ({
 function HospitalDetails({medicalData, nextStep, prevStep, setMedicalData, setArrayMcert}){
     const classes = useStyles();
     const [direction, setDirection] = useState('back');
+
+    /*
     const convertMcert = (file) =>{     
       console.log("Hello");
       const reader = new window.FileReader()
@@ -63,6 +67,7 @@ function HospitalDetails({medicalData, nextStep, prevStep, setMedicalData, setAr
 
       }
     }
+    */
         return(
          
         <div className="mt-5 mb-5">   
@@ -75,7 +80,7 @@ function HospitalDetails({medicalData, nextStep, prevStep, setMedicalData, setAr
           <Formik 
           initialValues={medicalData}
           onSubmit={values => {
-            convertMcert(values.mCert);
+           // convertMcert(values.mCert);
             setMedicalData(values);
             direction === 'back' ? prevStep() : nextStep();
           }}
@@ -122,14 +127,8 @@ function HospitalDetails({medicalData, nextStep, prevStep, setMedicalData, setAr
                      error={touched.doctor && errors.doctor}
                      helperText={touched.doctor && errors.doctor}
                      />
-                     <div className={classes.select}>
-                     <label for="id">Upload Your Verification document</label>
-                     <Field component={SimpleFileUpload} 
-                     InputProps={{ disableUnderline: true }}
-                     name="mCert" label={medicalData.mCert.name}
-                     error={touched.mCert && errors.mCert}
-                     helperText={touched.mCert&& errors.mCert} />
-                    </div>
+                     
+
 
                      <div className="mt-4">
                      <Button
@@ -163,7 +162,17 @@ function HospitalDetails({medicalData, nextStep, prevStep, setMedicalData, setAr
  </div>
             
               
-             
+           /* 
+           
+                      <div className={classes.select}>
+                     <label for="id">Upload Your Verification document</label>
+                     <Field component={SimpleFileUpload} 
+                     InputProps={{ disableUnderline: true }}
+                     name="mCert" label={medicalData.mCert.name}
+                     error={touched.mCert && errors.mCert}
+                     helperText={touched.mCert&& errors.mCert} />
+                    </div>
+           */   
         
     
            
